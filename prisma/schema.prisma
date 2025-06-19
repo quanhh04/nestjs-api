@@ -13,14 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model User { // ten thuc the o trong prisma
   id        Int   @id @default(autoincrement())
   email     String   @unique
   hashedPassword String
-  firstName String?
+  firstName String? // Optional field
   lastName  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  //relationships
+  notes     Note[] // One-to-many relationship with Note model
+
+  @@map("users") // Maps to the "users" table in the database => mapping ten thuc the trong prisma den bang trong csdl
 }
 
 model Note {
@@ -30,4 +35,10 @@ model Note {
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  //relationships
+  userId    Int // Foreign key to User model
+  user      User @relation(fields: [userId], references: [id]) // Establishes the relationship with User model
+
+  @@map("notes") // Maps to the "notes" table in the database
 }

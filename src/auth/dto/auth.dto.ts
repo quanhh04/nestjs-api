@@ -9,4 +9,10 @@ export class AuthDTO {
     @IsString()
     @IsNotEmpty()
     password: string;
+
+    @IsString()
+    firstName: string;
+    
+    @IsString()
+    lastName: string;
 };
