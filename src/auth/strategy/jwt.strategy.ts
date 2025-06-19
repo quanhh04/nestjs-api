@@ -7,11 +7,16 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
+import { Prisma } from "@prisma/client";
 import { Strategy, ExtractJwt } from "passport-jwt";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor(configService: ConfigService) {
+    constructor(
+        configService: ConfigService,
+        private prismaService: PrismaService
+    ) {
         super({
             // token sẽ được lấy từ header Authorization
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,10 +25,21 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         });
     }
 
-    validate(payload: any) { // hàm dùng để validate token
+    async validate(payload: {sub: number, email: string}) { // hàm dùng để validate token
         // payload chứa thông tin người dùng đã được mã hóa trong token
         // có thể là id, email, v.v.
-        return { userId: payload.sub, email: payload.email };
+        const user = await this.prismaService.user.findUnique({
+            where: {
+                id: payload.sub // sub là id của người dùng
+            }
+        });
+        if (!user) {
+            return null;
+        } else {
+            // Remove hashedPassword from the returned user object
+            const { hashedPassword, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        }
     }
 }
 
