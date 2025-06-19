@@ -1,5 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { MyJwtGuard } from '../auth/guard/myjwt.guard'; // Import custom JWT guard
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';

@@ -92,7 +92,7 @@ export class AuthService {
         }
 
         const jwtString = await this.jwtService.signAsync(payload, {
-            expiresIn: '10m', // Thời gian hết hạn của token, có thể điều chỉnh theo nhu cầu
+            expiresIn: '60m', // Thời gian hết hạn của token, có thể điều chỉnh theo nhu cầu
             secret: this.configService.get<string>('JWT_SECRET')
         });
 
