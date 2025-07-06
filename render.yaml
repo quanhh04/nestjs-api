@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: nest-api
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: JWT_SECRET
+        value: c88ca101063faef4ec43f9f91ecbd84d
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_ipIZBf1TKMy6@ep-blue-pine-a1gslll3-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
